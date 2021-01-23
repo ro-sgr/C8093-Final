@@ -26,6 +26,6 @@ def f(tiempo):
         theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
         THETA.append(theta)
 
-tiempo = int(input("Tiempo: "))
+tiempo = float(input("Tiempo: "))
 f(tiempo)
 print(THETA)
