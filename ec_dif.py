@@ -29,3 +29,4 @@ def f(tiempo):
 tiempo = float(input("Tiempo: "))
 f(tiempo)
 print(THETA)
+print(TIEMPO)
