@@ -8,24 +8,23 @@ R = 1.
 I = 1.
 
 def calcular_thetadpt(ang, vel):
-    ec_theta = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / R 
-    return ec_theta
+    ac_ang = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / R # Cálculo de la aceleración angular según la ecuación diferencial
+    return ac_ang
 
+TIEMPO = []
 THETA = []
 
 def f(tiempo):
     # Valores iniciales
     theta = 1.
     thetapt = 0.
-    dt = 0.01
-    iteraciones = 0
+    dt = 0.01 # Paso
     for i in np.arange(0,tiempo,dt):
-        iteraciones += 1
-        thetadpt = calcular_thetadpt(theta, thetapt)
-        thetapt = thetapt + thetadpt * dt
-        theta = theta + thetapt * dt
-        if iteraciones % 10 == 0:
-            THETA.append(theta)
+        TIEMPO.append(i) # Se adjunta el segundo a una lista
+        thetadpt = calcular_thetadpt(theta, thetapt) # Se calcula la aceleración angular según las variables
+        thetapt += thetadpt * dt # Como thetapt = d/dt (thetapt), theta_f = thetapt_i + thetadpt * dt, aprox
+        theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
+        THETA.append(theta)
 
 tiempo = int(input("Tiempo: "))
 f(tiempo)
