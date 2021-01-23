@@ -33,10 +33,9 @@ except:
     print("Por favor introduzca un valor válido.")
 
 f(tiempo)
-<<<<<<< HEAD
-print(len(THETA))
-print(len(TIEMPO))
-=======
+
 print(THETA)
+print(len(THETA))
+
 print(TIEMPO)
->>>>>>> 94a6adc4f979b37c8272ae1d99f1da751946c8be
+print(len(TIEMPO))
