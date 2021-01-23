@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Parámetros constantes:
 k = 1.
@@ -26,6 +27,11 @@ def f(tiempo):
         theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
         THETA.append(theta)
 
-tiempo = float(input("Tiempo: "))
+try:
+    tiempo = float(input("Tiempo: "))
+except:
+    print("Por favor introduzca un valor válido.")
+
 f(tiempo)
-print(THETA)
+print(len(THETA))
+print(len(TIEMPO))
