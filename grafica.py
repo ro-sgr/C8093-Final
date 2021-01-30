@@ -32,12 +32,10 @@ def f(tiempo):
 
 fig, ax = plt.subplots()
 
-# Límites de la gráfica
-ax.set_xlim(-10, 10)
-ax.set_ylim(-10,10)
 ax.grid(linestyle = "--")
 
 f(10)
+cuadros = 1. / 20
 
 def animacion(i):
     j = int(i / (1./20))
@@ -51,7 +49,7 @@ def animacion(i):
         th = THETA[j-100:j]
         a = TIEMPO[j-100]
         b = TIEMPO[j+100]
-    ax.set_xlim(a,b)
+    ax.set_xlim(a,b) # Límites de la gráfica
     ax.set_ylim(-5,5)
     linea, = ax.plot(t, th, "r") 
     return linea
