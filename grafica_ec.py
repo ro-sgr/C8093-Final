@@ -179,7 +179,7 @@ while _run:
         
         print("----- Mover parámetros -----\n")
 
-        k_inicial = 1.
+        k_0 = 1.
         A_inicial = 1.
         B_inicial = 1.
         R = 2.
@@ -196,25 +196,27 @@ while _run:
 
         fig, ax = plt.subplots()
 
-        f(k_inicial, A_inicial, B_inicial, R, I, temp)
+        f(k_0, A_inicial, B_inicial, R, I, temp)
         angulo = np.asarray(THETA)
 
         x = np.arange(0, temp, dt) # valores en x
-        y = (- k_inicial * angulo )/I - (((A_inicial*B_inicial)**2)* ((np.cos(angulo)) ** 2) * vel_inicial) / R # valores en y     
+        y = (- k_0 * angulo )/I - (((A_inicial*B_inicial)**2)* ((np.cos(angulo)) ** 2) * vel_inicial) / R # valores en y     
 
         l, = plt.plot(x, y, lw=1)
 
         # Deslizador k
         axk = plt.axes([0.25, .03, 0.50, 0.02])
-        dk = Slider(axk, 'K', 0, 1, valinit=k_inicial)
+        dk = Slider(axk, 'K', 0, 1, valinit=k_0)
+
+        # Deslizador A
+        axA = plt.axes([0.25, .03, 0.50, 0.02])
+        dA = Slider(axk, 'K', 0, 1, valinit=k_0)
 
         # Controles de animación
         is_manual = True
         intervalo = 100 # ms, tiempo entre cada cuadro de animación
-        loop_len = 5.0 # second por iteración
+        loop_len = 5.0 # segundo por iteración
         scale = intervalo / 1000 / loop_len
-        
-        # ax.plot(TIEMPO, THETA)
 
         ax.set(xlabel='tiempo (s)', ylabel='theta (θ)', title='Tiempo vs Theta')
         ax.grid(linestyle = "--")
@@ -224,7 +226,7 @@ while _run:
         def update_k(val):
             # actualizar curva
             l.set_ydata((- val * angulo )/I - (((A_inicial*B_inicial)**2)* ((np.cos(angulo)) ** 2) * vel_inicial) / R)
-            # redraw canvas while idle
+            # volver a dibujar el lienzo mientras está inactivo
             fig.canvas.draw_idle()
 
         def update_slider_k(val):
@@ -237,12 +239,12 @@ while _run:
         def update_plot(num):
             global is_manual
             if is_manual:
-                return l, # don't change
+                return l, # no modificar
 
             val_k = (dk.val + scale) % dk.valmax
             dk.set_val(val_k)
 
-            is_manual = False # the above line called update_slider, so we need to reset this
+            is_manual = False # la línea anterior llamada update_slider, por lo que necesitamos restablecer esto
             return l,
 
         def on_click(event):
@@ -254,7 +256,7 @@ while _run:
                 return
 
             else:
-                # user clicked somewhere else on canvas = unpause
+                # se hizo clic en otro lugar del lienzo, i.e. reanudar la pausa
                 global is_manual
                 is_manual=False
 
