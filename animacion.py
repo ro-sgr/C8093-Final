@@ -9,7 +9,7 @@ R = 1.
 I = 1.
 
 def calcular_thetadpt(ang, vel):
-    ac_ang = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / R # Cálculo de la aceleración angular según la ecuación diferencial
+    ac_ang = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / (R*I) # Cálculo de la aceleración angular según la ecuación diferencial
     return ac_ang
 
 TIEMPO = []
