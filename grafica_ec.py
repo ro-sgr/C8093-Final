@@ -159,11 +159,11 @@ while _run:
 
         print("----- Mover parámetros -----\n")
 
-        k_0 = entrada_real(input("Constante del resorte de torsión: "))
-        A_0 = entrada_real(input("Área de la espira: "))
-        B_0 = entrada_real(input("Intensidad de campo magnético: "))
-        R_0 = entrada_real(input("Resistencia de la espira: "))
-        I_0 = entrada_real(input("Momento de incercia de la espira: "))
+        k_0 = 1.
+        A_0 = 1.
+        B_0 = 1.
+        R_0 = 1.
+        I_0 = 1.
         temp = entrada_real(input("Tiempo: "))
 
         def f(k, A, B, R, I):
@@ -200,30 +200,27 @@ while _run:
         y = f(k_0, A_0, B_0, R_0, I_0)
         [linea] = ax.plot(t, y, linewidth=2, color='red')
         ax.set_xlim([0, temp])
-
-        # Considere que las condiciones iniciales pueden provocar que la gráfica "explote"
-        # es necesario corroborar que esto no ocurre para poder graficar
         ax.set_ylim([min(y)-1, max(y)+1])
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
-        k_deslizador = Slider(k_deslizador_ax, r'$k$', 0.1, 2*k_0, valinit=k_0)
+        k_deslizador = Slider(k_deslizador_ax, r'$k$', 0.1, 100, valinit=k_0)
 
         # A
         A_deslizador_ax = fig.add_axes([0.1, 0.20, 0.65, 0.03])
-        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 2*A_0, valinit=A_0)
+        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 100, valinit=A_0)
 
         # B
         B_deslizador_ax = fig.add_axes([0.1, 0.15, 0.65, 0.03])
-        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 2*B_0, valinit=B_0)
+        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 100, valinit=B_0)
 
         # R
         R_deslizador_ax = fig.add_axes([0.1, 0.10, 0.65, 0.03])
-        R_deslizador = Slider(R_deslizador_ax, r'$R$', 0.1, 2*R_0, valinit=R_0)
+        R_deslizador = Slider(R_deslizador_ax, r'$R$', 0.1, 100, valinit=R_0)
 
         # I
         I_deslizador_ax = fig.add_axes([0.1, 0.05, 0.65, 0.03])
-        I_deslizador = Slider(I_deslizador_ax, r'$I$', 0.1, 2*I_0, valinit=I_0)
+        I_deslizador = Slider(I_deslizador_ax, r'$I$', 0.1, 100, valinit=I_0)
 
         # Modifica la línea cuando un valor de cualquier deslizador cambia
         def cambio_deslizadores(val):
