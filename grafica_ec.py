@@ -51,7 +51,7 @@ while _run:
         A = entrada_real(input("Área de la espira: "))
         B = entrada_real(input("Intensidad de campo magnético: "))
         R = entrada_real(input("Resistencia de la espira: "))
-        I = entrada_real(input("Momento de incercia de la espira: "))
+        I = entrada_real(input("Momento de inercia de la espira: "))
         t = entrada_real(input("Tiempo: "))
 
         def calcular_thetadpt(ang, vel):
