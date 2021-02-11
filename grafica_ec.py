@@ -172,7 +172,7 @@ while _run:
             # Valores iniciales
             theta = 1.
             thetapt = 0.
-            dt = 0.01 # Paso
+            dt = 0.001 # Paso
 
             for i in np.arange(0.0, temp, dt):
                 TIEMPO.append(i)
@@ -194,7 +194,7 @@ while _run:
 
         fig.subplots_adjust(bottom=0.4)
 
-        t = np.arange(0.0, temp, 0.01)
+        t = np.arange(0.0, temp, 0.001)
 
         # Gráfica inicial
         y = f(k_0, A_0, B_0, R_0, I_0)
