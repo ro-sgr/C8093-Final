@@ -148,7 +148,7 @@ while _run:
         clear()
 
     elif opcion == '2':
-
+        
         from matplotlib.widgets import Slider, Button, RadioButtons
 
         print("----- Mover parámetros -----\n")
@@ -191,28 +191,27 @@ while _run:
         y = f(k_0, A_0, B_0, R_0, I_0)
         [linea] = ax.plot(t, y, linewidth=2, color='red')
         ax.set_xlim([0, temp])
-        ax.set_ylim([-2, 2])
-        print(max(y))
+        ax.set_ylim([-max(y)-1, max(y)+1])
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
-        k_deslizador = Slider(k_deslizador_ax, 'k', 0.1, 10.0, valinit=k_0)
+        k_deslizador = Slider(k_deslizador_ax, r'$k$', 0.1, 10.0, valinit=k_0)
 
         # A
         A_deslizador_ax = fig.add_axes([0.1, 0.20, 0.65, 0.03])
-        A_deslizador = Slider(A_deslizador_ax, 'A', 0.1, 10.0, valinit=A_0)
+        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 10.0, valinit=A_0)
 
         # B
         B_deslizador_ax = fig.add_axes([0.1, 0.15, 0.65, 0.03])
-        B_deslizador = Slider(B_deslizador_ax, 'B', 0.1, 10.0, valinit=B_0)
+        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 10.0, valinit=B_0)
 
         # R
         R_deslizador_ax = fig.add_axes([0.1, 0.10, 0.65, 0.03])
-        R_deslizador = Slider(R_deslizador_ax, 'R', 0.1, 10.0, valinit=R_0)
+        R_deslizador = Slider(R_deslizador_ax, r'$R$', 0.1, 10.0, valinit=R_0)
 
         # I
         I_deslizador_ax = fig.add_axes([0.1, 0.05, 0.65, 0.03])
-        I_deslizador = Slider(I_deslizador_ax, 'I', 0.1, 10.0, valinit=I_0)
+        I_deslizador = Slider(I_deslizador_ax, r'$I$', 0.1, 10.0, valinit=I_0)
 
         # Modifica la línea cuando un valor de cualquier deslizador cambia
         def cambio_deslizadores(val):
