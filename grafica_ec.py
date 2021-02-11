@@ -80,6 +80,8 @@ while _run:
         ax1 = fig1.add_subplot(111)
         ax1.grid(linestyle = "--")
 
+        ax1.set_facecolor('#000000')
+
         f(t)
         cuadros = 1. / 20
 
@@ -97,7 +99,7 @@ while _run:
                 b = TIEMPO[j+100]
             ax1.set_xlim(a,b) # Límites de la gráfica
             ax1.set_ylim(-5,5)
-            linea, = ax1.plot(t, th, "r") 
+            linea, = ax1.plot(t, th, "#05d2ed") 
             return linea
 
         animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = 10) # Altérese el denominador del paso para cambiar los fps
@@ -110,6 +112,8 @@ while _run:
 
         fig2 = plt.figure()
         ax2 = fig2.add_subplot(111)
+
+        ax2.set_facecolor('#000000')
 
         # Límites de la gráfica
         ax2.set_xlim(-2,2)
@@ -148,7 +152,7 @@ while _run:
         clear()
 
     elif opcion == '2':
-        
+
         from matplotlib.widgets import Slider, Button, RadioButtons
 
         print("----- Mover parámetros -----\n")
