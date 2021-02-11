@@ -83,7 +83,7 @@ while _run:
         ax1.grid(linestyle = "--")
         ax1.set_facecolor('#000000')
 
-        f(t)
+        y_fig1 = f(t)
         cuadros = 1. / 20
 
         def animacion1(i):
@@ -99,11 +99,11 @@ while _run:
                 a = TIEMPO[j-100]
                 b = TIEMPO[j+100]
             ax1.set_xlim(a,b) # Límites de la gráfica
-            ax1.set_ylim(-5,5)
+            ax1.set_ylim(-2,2)
             linea, = ax1.plot(t, th, "#05d2ed") 
             return linea
 
-        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = 10) # Altérese el denominador del paso para cambiar los fps
+        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = t) # Altérese el denominador del paso para cambiar los fps
 
         # FIGURA 2
 
@@ -200,7 +200,10 @@ while _run:
         y = f(k_0, A_0, B_0, R_0, I_0)
         [linea] = ax.plot(t, y, linewidth=2, color='red')
         ax.set_xlim([0, temp])
-        ax.set_ylim([-max(y)-1, max(y)+1])
+
+        # Considere que las condiciones iniciales pueden provocar que la gráfica "explote"
+        # es necesario corroborar que esto no ocurre para poder graficar
+        ax.set_ylim([min(y)-1, max(y)+1])
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
