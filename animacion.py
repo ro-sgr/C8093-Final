@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 ## Desde aquí hasta el siguiente marcador es el código de ec_dif.py
-k = 10. ## Rodrigo es ingeniero industrial
+k = 10. # Rodrigo es ingeniero industrial
 A = 1.
 B = 1.
 R = 1.
