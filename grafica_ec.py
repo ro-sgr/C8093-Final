@@ -77,9 +77,10 @@ while _run:
         # FIGURA 1
 
         fig1 = plt.figure()
+        fig1.canvas.set_window_title('Oscilador')
         ax1 = fig1.add_subplot(111)
-        ax1.grid(linestyle = "--")
 
+        ax1.grid(linestyle = "--")
         ax1.set_facecolor('#000000')
 
         f(t)
@@ -111,8 +112,9 @@ while _run:
         y = [0,0]
 
         fig2 = plt.figure()
-        ax2 = fig2.add_subplot(111)
+        fig1.canvas.set_window_title('Espira')
 
+        ax2 = fig2.add_subplot(111)
         ax2.set_facecolor('#000000')
 
         # Límites de la gráfica
@@ -120,7 +122,7 @@ while _run:
         ax2.set_ylim(-2,2)
 
         # Recta que hará de oscilador
-        linea, = ax2.plot(0, 0, "r")
+        linea, = ax2.plot(0, 0, "#ede505")
 
         # Recta horizontal
         plt.axhline(0,-2,2,color="gray",linestyle="--")
@@ -157,6 +159,11 @@ while _run:
 
         print("----- Mover parámetros -----\n")
 
+        k_0 = entrada_real(input("Constante del resorte de torsión: "))
+        A_0 = entrada_real(input("Área de la espira: "))
+        B_0 = entrada_real(input("Intensidad de campo magnético: "))
+        R_0 = entrada_real(input("Resistencia de la espira: "))
+        I_0 = entrada_real(input("Momento de incercia de la espira: "))
         temp = entrada_real(input("Tiempo: "))
 
         def f(k, A, B, R, I):
@@ -180,16 +187,14 @@ while _run:
             return np.asarray(THETA)
 
         fig = plt.figure()
+        fig.canvas.set_window_title('Oscilador')
+
         ax = fig.add_subplot(111)
+        ax.set_facecolor('#000000')
 
         fig.subplots_adjust(bottom=0.4)
 
         t = np.arange(0.0, temp, 0.01)
-        k_0 = 1.
-        A_0 = 1.
-        B_0 = 1.
-        R_0 = 1.
-        I_0 = 1.
 
         # Gráfica inicial
         y = f(k_0, A_0, B_0, R_0, I_0)
@@ -199,23 +204,23 @@ while _run:
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
-        k_deslizador = Slider(k_deslizador_ax, r'$k$', 0.1, 10.0, valinit=k_0)
+        k_deslizador = Slider(k_deslizador_ax, r'$k$', 0.1, 2*k_0, valinit=k_0)
 
         # A
         A_deslizador_ax = fig.add_axes([0.1, 0.20, 0.65, 0.03])
-        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 10.0, valinit=A_0)
+        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 2*A_0, valinit=A_0)
 
         # B
         B_deslizador_ax = fig.add_axes([0.1, 0.15, 0.65, 0.03])
-        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 10.0, valinit=B_0)
+        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 2*B_0, valinit=B_0)
 
         # R
         R_deslizador_ax = fig.add_axes([0.1, 0.10, 0.65, 0.03])
-        R_deslizador = Slider(R_deslizador_ax, r'$R$', 0.1, 10.0, valinit=R_0)
+        R_deslizador = Slider(R_deslizador_ax, r'$R$', 0.1, 2*R_0, valinit=R_0)
 
         # I
         I_deslizador_ax = fig.add_axes([0.1, 0.05, 0.65, 0.03])
-        I_deslizador = Slider(I_deslizador_ax, r'$I$', 0.1, 10.0, valinit=I_0)
+        I_deslizador = Slider(I_deslizador_ax, r'$I$', 0.1, 2*I_0, valinit=I_0)
 
         # Modifica la línea cuando un valor de cualquier deslizador cambia
         def cambio_deslizadores(val):
