@@ -1,10 +1,6 @@
 from os import system, name
 from time import sleep
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
 def texto_pausado(texto,tiempo):
     for i in range(len(texto)):
         print(texto[i], sep='', end='', flush=True); sleep(tiempo)
@@ -19,16 +15,19 @@ def clear():
 
 clear()
 
-def entrada_real(numero):
-    try:
-        entrada = float(numero)
-    except:
-        print("Por favor introduzca una entrada válida.")
-        exit()
-    return entrada
-
 _run = True
 while _run:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def entrada_real(numero):
+        try:
+            entrada = float(numero)
+        except:
+            print("Por favor introduzca una entrada válida.")
+            exit()
+        return entrada
 
     print("----- GRAFICADORA -----\n")
 
@@ -42,6 +41,8 @@ while _run:
 
     if opcion == '1':
 
+        from matplotlib.animation import FuncAnimation
+
         TIEMPO = []
         THETA = []
 
@@ -51,7 +52,7 @@ while _run:
         A = entrada_real(input("Área de la espira: "))
         B = entrada_real(input("Intensidad de campo magnético: "))
         R = entrada_real(input("Resistencia de la espira: "))
-        I = entrada_real(input("Momento de inercia de la espira: "))
+        I = entrada_real(input("Momento de incercia de la espira: "))
         t = entrada_real(input("Tiempo: "))
 
         def calcular_thetadpt(ang, vel):
@@ -103,7 +104,7 @@ while _run:
             linea, = ax1.plot(t, th, "#05d2ed") 
             return linea
 
-        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, cuadros),interval = t) # Altérese el denominador del paso para cambiar los fps
+        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = t) # Altérese el denominador del paso para cambiar los fps
 
         # FIGURA 2
 
