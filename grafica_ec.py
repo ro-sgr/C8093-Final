@@ -168,7 +168,7 @@ while _run:
 
                 # Se calcula la aceleración angular según las variables
                 thetadpt = (- k * theta )/I - (((A*B)**2)* ((np.cos(theta)) ** 2) * thetapt) / (R*I)
-                
+
                 thetapt += thetadpt * dt # Como thetapt = d/dt (thetapt), theta_f = thetapt_i + thetadpt * dt, aprox
                 theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
                 THETA.append(theta)
@@ -190,7 +190,7 @@ while _run:
         # Gráfica inicial
         y = f(k_0, A_0, B_0, R_0, I_0)
         [linea] = ax.plot(t, y, linewidth=2, color='red')
-        ax.set_xlim([0, 100])
+        ax.set_xlim([0, temp])
         ax.set_ylim([-2, 2])
 
         # Add two sliders for tweaking the parameters
