@@ -103,7 +103,7 @@ while _run:
             linea, = ax1.plot(t, th, "#05d2ed") 
             return linea
 
-        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = t) # Altérese el denominador del paso para cambiar los fps
+        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, cuadros),interval = t) # Altérese el denominador del paso para cambiar los fps
 
         # FIGURA 2
 
