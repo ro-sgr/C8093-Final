@@ -1,16 +1,18 @@
 from os import system, name
 from time import sleep
 
+# Texto se "escribe" en pantalla
 def texto_pausado(texto,tiempo):
     for i in range(len(texto)):
         print(texto[i], sep='', end='', flush=True); sleep(tiempo)
 
-def clear(): 
-    # windows 
-    if name == 'nt': 
-        _ = system('cls') 
-    # mac and linux
-    else: 
+# Borra el contenido de la consola
+def clear():
+    # windows
+    if name == 'nt':
+        _ = system('cls')
+    # mac y linux
+    else:
         _ = system('clear')
 
 clear()
@@ -21,6 +23,7 @@ while _run:
     import numpy as np
     import matplotlib.pyplot as plt
 
+    # Verificador que las entradas sean números reales
     def entrada_real(numero):
         try:
             entrada = float(numero)
@@ -43,112 +46,120 @@ while _run:
 
         from matplotlib.animation import FuncAnimation
 
-        TIEMPO = []
-        THETA = []
-
         print("----- Graficar en tiempo real -----\n")
 
-        k = entrada_real(input("Constante del resorte de torsión: "))
-        A = entrada_real(input("Área de la espira: "))
-        B = entrada_real(input("Intensidad de campo magnético: "))
-        R = entrada_real(input("Resistencia de la espira: "))
-        I = entrada_real(input("Momento de incercia de la espira: "))
-        t = entrada_real(input("Tiempo: "))
+        k_0 = entrada_real(input("Constante del resorte de torsión: "))
+        A_0 = entrada_real(input("Área de la espira: "))
+        B_0 = entrada_real(input("Intensidad de campo magnético: "))
+        R_0 = entrada_real(input("Resistencia de la espira: "))
+        I_0 = entrada_real(input("Momento de incercia de la espira: "))
+        max_t = entrada_real(input("Tiempo: "))
 
-        def calcular_thetadpt(ang, vel):
-            ac_ang = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / (R*I) # Cálculo de la aceleración angular según la ecuación diferencial
-            return ac_ang
+        # Solución a la ecuación diferencial en un intervalo de tiempo
+        def f(k, A, B, R, I, t):
+            TIEMPO = []
+            THETA = []
 
-        def f(tiempo):
             # Valores iniciales
             theta = 1.
             thetapt = 0.
             dt = 0.01 # Paso
 
-            for i in np.arange(0,tiempo,dt):
+            # Iteramos para anexar valores a nuestra lista en pasos diferentes de tiempo
+            for i in np.arange(0,t,dt):
                 TIEMPO.append(i) # Se adjunta el segundo a una lista
 
-                thetadpt = calcular_thetadpt(theta, thetapt) # Se calcula la aceleración angular según las variables
+                # Cálculo de la aceleración angular según la ecuación diferencial
+                thetadpt = (- k * theta )/I - (((A*B)**2)* ((np.cos(theta)) ** 2) * thetapt) / (R*I)
+
                 thetapt += thetadpt * dt # Como thetapt = d/dt (thetapt), theta_f = thetapt_i + thetadpt * dt, aprox
                 theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
                 THETA.append(theta)
 
-            return theta # Le agregué esto
+            return np.asarray(TIEMPO), np.asarray(THETA), theta
 
-        # FIGURA 1
+        ### FIGURA 1
 
-        fig1 = plt.figure()
-        fig1.canvas.set_window_title('Oscilador')
-        ax1 = fig1.add_subplot(111)
+        fig1 = plt.figure() # generación de la figura
+        fig1.canvas.set_window_title('Oscilador') # título de la ventana
 
-        ax1.grid(linestyle = "--")
-        ax1.set_facecolor('#000000')
+        ax1 = fig1.add_subplot(111) # tamaño de la gráfica
+        ax1.grid(linestyle = "--") # cuadrícula
+        ax1.set_facecolor('#000000') # color del plano
 
-        y_fig1 = f(t)
-        cuadros = 1. / 20
+        sol = f(k_0, A_0, B_0, R_0, I_0, max_t) # solución a la ecuación diferencial
+        x_fig1 = sol[0] # valores de tiempo
+        y_fig1 = sol[1] # valores en y
 
+        # Generación de las posiciones en x y en y del oscilador
         def animacion1(i):
-            j = int(i / (1./20))
+            j = int(i / (1./60))
             if j < 101:
-                t = TIEMPO[0:j]
-                th = THETA[0:j]
-                a = TIEMPO[0]
-                b = TIEMPO[200]
-            else: 
-                t = TIEMPO[j-100:j]
-                th = THETA[j-100:j]
-                a = TIEMPO[j-100]
-                b = TIEMPO[j+100]
-            ax1.set_xlim(a,b) # Límites de la gráfica
+                t = x_fig1[0:j]
+                th = y_fig1[0:j]
+                a = x_fig1[0]
+                b = x_fig1[200]
+            else:
+                t = x_fig1[j-100:j]
+                th = y_fig1[j-100:j]
+                a = x_fig1[j-100]
+                b = x_fig1[j+100]
+
+            # Límites de la gráfica
+            # Observe que los valores en x irán cambiando, por lo que la gráfica se desplazará
+            ax1.set_xlim(a,b)
             ax1.set_ylim(-2,2)
-            linea, = ax1.plot(t, th, "#05d2ed") 
+
+            linea, = ax1.plot(t, th, "#05d2ed") # Generación de la curva
+            
             return linea
 
-        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./20)),interval = t) # Altérese el denominador del paso para cambiar los fps
+        # Se genera la animación haciendo uso de la función "FuncAnimation" nativa de matplotlib
+        # Altérese el denominador de 'cuadros' para cambiar los fps
+        animation1 = FuncAnimation(fig1, func=animacion1, frames=np.arange(0, 100, (1./60)),interval = max_t)
 
-        # FIGURA 2
+        ### FIGURA 2
 
         # Se definen dos listas que serán las entradas en X y en Y de los extremos del oscilador
         x = [0,0]
         y = [0,0]
 
-        fig2 = plt.figure()
-        fig1.canvas.set_window_title('Espira')
+        fig2 = plt.figure() # generación de figura
+        fig2.canvas.set_window_title('Espira') # título de la ventana emergente
 
-        ax2 = fig2.add_subplot(111)
-        ax2.set_facecolor('#000000')
+        ax2 = fig2.add_subplot(111) # tamaño de la gráfica
+        ax2.set_facecolor('#000000') # color del plano
 
         # Límites de la gráfica
         ax2.set_xlim(-2,2)
         ax2.set_ylim(-2,2)
 
-        # Recta que hará de oscilador
+        # Recta que generará el oscilador
         linea, = ax2.plot(0, 0, "#ede505")
 
         # Recta horizontal
         plt.axhline(0,-2,2,color="gray",linestyle="--")
 
         def animacion2(i):
-            # Se definen las coordenadas de los extremos
-            x1 = np.cos(f(i))
-            y1 = np.sin(f(i))
-            x2 = -np.cos(f(i))
-            y2 = -np.sin(f(i))
-        
-            # Se alteran las entradas de las listas que definen los extremos de acuerdo a los valores recién calculados
 
+            # Se definen las coordenadas de los extremos
+            x1 = np.cos(f(k_0, A_0, B_0, R_0, I_0, i)[2])
+            y1 = np.sin(f(k_0, A_0, B_0, R_0, I_0, i)[2])
+            x2 = -x1
+            y2 = -y1
+
+            # Se alteran las entradas de las listas que definen los extremos de acuerdo a los valores recién calculados
             x[0] = x1
             y[0] = y1
-
             x[1] = x2
             y[1] = y2
 
             linea.set_xdata(x) # Se dan los extremos en x del oscilador
             linea.set_ydata(y) # Se dan los extremos en y del oscilador
-            
+
             return linea
 
-        animation2 = FuncAnimation(fig2, func=animacion2, frames=np.arange(0, 100, (1./60)),interval = t)
+        animation2 = FuncAnimation(fig2, func=animacion2, frames=np.arange(0, 100, (1./60)), interval=max_t)
 
         plt.show()
 
@@ -160,23 +171,26 @@ while _run:
 
         print("----- Mover parámetros -----\n")
 
+        # Valores iniciales del oscilador
+        # Note que la combinación de ciertos valores pueden provocar que el oscilador no sea graficado
         k_0 = 1.
         A_0 = 1.
         B_0 = 1.
         R_0 = 1.
         I_0 = 1.
-        temp = entrada_real(input("Tiempo: "))
+        max_t = entrada_real(input("Tiempo: "))
 
+        # Función que da solución a la ecuación diferencial
         def f(k, A, B, R, I):
-            TIEMPO =[]
             THETA = []
+
             # Valores iniciales
+            # Modifique para apreciar diferentes comportamientos del oscilador
             theta = 1.
             thetapt = 0.
             dt = 0.001 # Paso
 
-            for i in np.arange(0.0, temp, dt):
-                TIEMPO.append(i)
+            for _ in np.arange(0.0, max_t, dt):
 
                 # Se calcula la aceleración angular según las variables
                 thetadpt = (- k * theta )/I - (((A*B)**2)* ((np.cos(theta)) ** 2) * thetapt) / (R*I)
@@ -187,21 +201,28 @@ while _run:
 
             return np.asarray(THETA)
 
-        fig = plt.figure()
-        fig.canvas.set_window_title('Oscilador')
+        fig = plt.figure() # generamos la figura
+        fig.canvas.set_window_title('Oscilador') # título de la ventana
 
-        ax = fig.add_subplot(111)
-        ax.set_facecolor('#000000')
+        ax = fig.add_subplot(111) # espaciado de la figura
+        ax.set_facecolor('#000000') # color del plano
 
-        fig.subplots_adjust(bottom=0.4)
+        fig.subplots_adjust(bottom=0.4) # espaciado de la gráfica
 
-        t = np.arange(0.0, temp, 0.001)
-
-        # Gráfica inicial
+        t = np.arange(0.0, max_t, 0.001)
         y = f(k_0, A_0, B_0, R_0, I_0)
+
+        # Lista de valores en y
+        # Nos ayudará a actualizar los parámetros a futuro
         [linea] = ax.plot(t, y, linewidth=2, color='red')
-        ax.set_xlim([0, temp])
-        ax.set_ylim([-max(y)-1, max(y)+1])
+
+        ax.set_xlim([0, max_t]) # rango eje x
+        ax.set_ylim([-max(y)-1, max(y)+1]) # rango eje y
+
+        ## DESLIZADORES
+        # En esta sección, se encuentran los deslizadores que nos permitirán modificar la gráfica en tiempo real, la estructura es la siguiente:
+        # parámetro_deslizador_ax = posicionamiento del objeto en la pantalla
+        # parámetro_deslizador = Slider(posición, etiqueta, valor mínimo, valor máximo, valor inicial)
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
@@ -228,13 +249,14 @@ while _run:
             linea.set_ydata(f(k_deslizador.val, A_deslizador.val, B_deslizador.val, R_deslizador.val, I_deslizador.val))
             fig.canvas.draw_idle()
 
+        # La función se ejecuta si se persive algún cambio en el deslizador
         k_deslizador.on_changed(cambio_deslizadores)
         A_deslizador.on_changed(cambio_deslizadores)
         B_deslizador.on_changed(cambio_deslizadores)
         R_deslizador.on_changed(cambio_deslizadores)
         I_deslizador.on_changed(cambio_deslizadores)
 
-        # Botón para reiniciar los parámetros
+        # Botón para reestablecer los valores a las condiciones iniciales por defecto establecidas
         boton_reinicio_ax = fig.add_axes([0.85, 0.075, 0.1, 0.04])
         boton_reinicio = Button(boton_reinicio_ax, 'Reiniciar', hovercolor='0.975')
         def reinicio_boton(mouse_event):
