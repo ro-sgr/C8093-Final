@@ -192,10 +192,9 @@ while _run:
         [linea] = ax.plot(t, y, linewidth=2, color='red')
         ax.set_xlim([0, temp])
         ax.set_ylim([-2, 2])
+        print(max(y))
 
-        # Add two sliders for tweaking the parameters
-
-        # Define an axes area and draw a slider in it
+        # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
         k_deslizador = Slider(k_deslizador_ax, 'k', 0.1, 10.0, valinit=k_0)
 
