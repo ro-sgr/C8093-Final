@@ -4,7 +4,6 @@ from time import sleep
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from matplotlib.widgets import Slider
 
 def texto_pausado(texto,tiempo):
     for i in range(len(texto)):
@@ -28,14 +27,6 @@ def entrada_real(numero):
         exit()
     return entrada
 
-
-## Desde aquí hasta el siguiente marcador es el código de ec_dif.py
-k = 100.
-A = 1.
-B = 1.
-R = 2.
-I = 1.
-
 _run = True
 while _run:
 
@@ -54,7 +45,7 @@ while _run:
         TIEMPO = []
         THETA = []
 
-        print("----- GRAFICADORA -----\n")
+        print("----- Graficar en tiempo real -----\n")
 
         k = entrada_real(input("Constante del resorte de torsión: "))
         A = entrada_real(input("Área de la espira: "))
@@ -157,118 +148,97 @@ while _run:
         clear()
 
     elif opcion == '2':
-        THETA = []
 
-        def calcular_thetadpt(k, A, B, R, I, ang, vel):
-            ac_ang = (- k * ang )/I - (((A*B)**2)* ((np.cos(ang)) ** 2) * vel) / R # Cálculo de la aceleración angular según la ecuación diferencial
-            return ac_ang
+        from matplotlib.widgets import Slider, Button, RadioButtons
 
-        def f(k, A, B, R, I, t):
+        print("----- Mover parámetros -----\n")
+
+        temp = entrada_real(input("Tiempo: "))
+
+        def f(k, A, B, R, I):
+            TIEMPO =[]
+            THETA = []
             # Valores iniciales
             theta = 1.
             thetapt = 0.
             dt = 0.01 # Paso
 
-            for i in np.arange(0,t,dt):
-                thetadpt = calcular_thetadpt(k, A, B, R, I, theta, thetapt) # Se calcula la aceleración angular según las variables
+            for i in np.arange(0.0, temp, dt):
+                TIEMPO.append(i)
+
+                # Se calcula la aceleración angular según las variables
+                thetadpt = (- k * theta )/I - (((A*B)**2)* ((np.cos(theta)) ** 2) * thetapt) / (R*I)
+                
                 thetapt += thetadpt * dt # Como thetapt = d/dt (thetapt), theta_f = thetapt_i + thetadpt * dt, aprox
                 theta += thetapt * dt # Como thetapt = d/dt (theta), theta_f = thetapt_i + thetadpt * dt, aprox
                 THETA.append(theta)
 
-            return theta # Le agregué esto
-        
-        print("----- Mover parámetros -----\n")
+            return np.asarray(THETA)
 
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+
+        fig.subplots_adjust(bottom=0.4)
+
+        t = np.arange(0.0, temp, 0.01)
         k_0 = 1.
-        A_inicial = 1.
-        B_inicial = 1.
-        R = 2.
-        I = 1.
+        A_0 = 1.
+        B_0 = 1.
+        R_0 = 1.
+        I_0 = 1.
 
-        vel_inicial = 0.
-        theta_inicial = 1.
+        # Gráfica inicial
+        y = f(k_0, A_0, B_0, R_0, I_0)
+        [linea] = ax.plot(t, y, linewidth=2, color='red')
+        ax.set_xlim([0, 100])
+        ax.set_ylim([-2, 2])
 
-        temp = entrada_real(input("Tiempo: "))
+        # Add two sliders for tweaking the parameters
 
-        theta = 1.
-        thetapt = 0.
-        dt = 0.01 # Paso
+        # Define an axes area and draw a slider in it
+        k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
+        k_deslizador = Slider(k_deslizador_ax, 'k', 0.1, 10.0, valinit=k_0)
 
-        fig, ax = plt.subplots()
+        # A
+        A_deslizador_ax = fig.add_axes([0.1, 0.20, 0.65, 0.03])
+        A_deslizador = Slider(A_deslizador_ax, 'A', 0.1, 10.0, valinit=A_0)
 
-        f(k_0, A_inicial, B_inicial, R, I, temp)
-        angulo = np.asarray(THETA)
+        # B
+        B_deslizador_ax = fig.add_axes([0.1, 0.15, 0.65, 0.03])
+        B_deslizador = Slider(B_deslizador_ax, 'B', 0.1, 10.0, valinit=B_0)
 
-        x = np.arange(0, temp, dt) # valores en x
-        y = (- k_0 * angulo )/I - (((A_inicial*B_inicial)**2)* ((np.cos(angulo)) ** 2) * vel_inicial) / R # valores en y     
+        # R
+        R_deslizador_ax = fig.add_axes([0.1, 0.10, 0.65, 0.03])
+        R_deslizador = Slider(R_deslizador_ax, 'R', 0.1, 10.0, valinit=R_0)
 
-        l, = plt.plot(x, y, lw=1)
+        # I
+        I_deslizador_ax = fig.add_axes([0.1, 0.05, 0.65, 0.03])
+        I_deslizador = Slider(I_deslizador_ax, 'I', 0.1, 10.0, valinit=I_0)
 
-        # Deslizador k
-        axk = plt.axes([0.25, .03, 0.50, 0.02])
-        dk = Slider(axk, 'K', 0, 1, valinit=k_0)
-
-        # Deslizador A
-        axA = plt.axes([0.25, .03, 0.50, 0.02])
-        dA = Slider(axk, 'K', 0, 1, valinit=k_0)
-
-        # Controles de animación
-        is_manual = True
-        intervalo = 100 # ms, tiempo entre cada cuadro de animación
-        loop_len = 5.0 # segundo por iteración
-        scale = intervalo / 1000 / loop_len
-
-        ax.set(xlabel='tiempo (s)', ylabel='theta (θ)', title='Tiempo vs Theta')
-        ax.grid(linestyle = "--")
-
-        # k
-
-        def update_k(val):
-            # actualizar curva
-            l.set_ydata((- val * angulo )/I - (((A_inicial*B_inicial)**2)* ((np.cos(angulo)) ** 2) * vel_inicial) / R)
-            # volver a dibujar el lienzo mientras está inactivo
+        # Modifica la línea cuando un valor de cualquier deslizador cambia
+        def cambio_deslizadores(val):
+            linea.set_ydata(f(k_deslizador.val, A_deslizador.val, B_deslizador.val, R_deslizador.val, I_deslizador.val))
             fig.canvas.draw_idle()
 
-        def update_slider_k(val):
-            global is_manual
-            is_manual=True
-            update_k(val)
+        k_deslizador.on_changed(cambio_deslizadores)
+        A_deslizador.on_changed(cambio_deslizadores)
+        B_deslizador.on_changed(cambio_deslizadores)
+        R_deslizador.on_changed(cambio_deslizadores)
+        I_deslizador.on_changed(cambio_deslizadores)
 
-        # Global
+        # Botón para reiniciar los parámetros
+        boton_reinicio_ax = fig.add_axes([0.85, 0.075, 0.1, 0.04])
+        boton_reinicio = Button(boton_reinicio_ax, 'Reiniciar', hovercolor='0.975')
+        def reinicio_boton(mouse_event):
+            k_deslizador.reset()
+            A_deslizador.reset()
+            B_deslizador.reset()
+            R_deslizador.reset()
+            I_deslizador.reset()
 
-        def update_plot(num):
-            global is_manual
-            if is_manual:
-                return l, # no modificar
-
-            val_k = (dk.val + scale) % dk.valmax
-            dk.set_val(val_k)
-
-            is_manual = False # la línea anterior llamada update_slider, por lo que necesitamos restablecer esto
-            return l,
-
-        def on_click(event):
-            (xm_k,ym_k),(xM_k,yM_k) = dk.label.clipbox.get_points()
-
-            # k
-            if xm_k < event.x < xM_k and ym_k < event.y < yM_k:
-                # Evento ocurre en el deslizador, ignorar ya que está siendo tratado por update_slider
-                return
-
-            else:
-                # se hizo clic en otro lugar del lienzo, i.e. reanudar la pausa
-                global is_manual
-                is_manual=False
-
-        dk.on_changed(update_slider_k)
-
-        fig.canvas.mpl_connect('button_press_event', on_click)
-
-        animacion = FuncAnimation(fig, update_plot, interval=intervalo)
+        boton_reinicio.on_clicked(reinicio_boton)
 
         plt.show()
-
-        clear()
 
     elif opcion == '3':
         _run = False
