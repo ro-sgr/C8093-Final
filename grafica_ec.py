@@ -200,7 +200,7 @@ while _run:
         y = f(k_0, A_0, B_0, R_0, I_0)
         [linea] = ax.plot(t, y, linewidth=2, color='red')
         ax.set_xlim([0, temp])
-        ax.set_ylim([min(y)-1, max(y)+1])
+        ax.set_ylim([-max(y)-1, max(y)+1])
 
         # k
         k_deslizador_ax  = fig.add_axes([0.1, 0.25, 0.65, 0.03])
@@ -208,11 +208,11 @@ while _run:
 
         # A
         A_deslizador_ax = fig.add_axes([0.1, 0.20, 0.65, 0.03])
-        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 100, valinit=A_0)
+        A_deslizador = Slider(A_deslizador_ax, r'$A$', 0.1, 50, valinit=A_0)
 
         # B
         B_deslizador_ax = fig.add_axes([0.1, 0.15, 0.65, 0.03])
-        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 100, valinit=B_0)
+        B_deslizador = Slider(B_deslizador_ax, r'$B$', 0.1, 50, valinit=B_0)
 
         # R
         R_deslizador_ax = fig.add_axes([0.1, 0.10, 0.65, 0.03])
