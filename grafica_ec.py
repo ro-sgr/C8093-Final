@@ -82,10 +82,13 @@ while _run:
 
         fig1 = plt.figure() # generación de la figura
         fig1.canvas.set_window_title('Oscilador') # título de la ventana
+        fig1.suptitle('Oscilador armónico', fontsize=16)
 
         ax1 = fig1.add_subplot(111) # tamaño de la gráfica
         ax1.grid(linestyle = "--") # cuadrícula
         ax1.set_facecolor('#000000') # color del plano
+        ax1.set_xlabel(r't ($s$)') # eje X
+        ax1.set_ylabel(r'theta ($ \theta $)') # eje Y
 
         sol = f(k_0, A_0, B_0, R_0, I_0, max_t) # solución a la ecuación diferencial
         x_fig1 = sol[0] # valores de tiempo
@@ -126,9 +129,12 @@ while _run:
 
         fig2 = plt.figure() # generación de figura
         fig2.canvas.set_window_title('Espira') # título de la ventana emergente
+        fig2.suptitle('Vista superior de la simulación', fontsize=16)
 
         ax2 = fig2.add_subplot(111) # tamaño de la gráfica
         ax2.set_facecolor('#000000') # color del plano
+        ax2.set_xticks([]) # eje X
+        ax2.set_yticks([]) # eje Y
 
         # Límites de la gráfica
         ax2.set_xlim(-2,2)
@@ -203,9 +209,12 @@ while _run:
 
         fig = plt.figure() # generamos la figura
         fig.canvas.set_window_title('Oscilador') # título de la ventana
+        fig.suptitle('Oscilador armónico', fontsize=16)
 
         ax = fig.add_subplot(111) # espaciado de la figura
         ax.set_facecolor('#000000') # color del plano
+        ax.set_xlabel(r't ($s$)') # eje X
+        ax.set_ylabel(r'theta ($ \theta $)') # eje Y
 
         fig.subplots_adjust(bottom=0.4) # espaciado de la gráfica
 
